@@ -3,11 +3,9 @@ const app = express()
 const port = process.env.port || 3000
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello vercel!')
-})
-
-app.get('/test', (req: Request, res: Response) => {
-  res.send('Hello test!')
+  res
+    .sendStatus(200)
+    .send('Hello WTF !')
 })
 
 app.listen(port, () => {
