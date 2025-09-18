@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
         .sendStatus(200)
         .send('Hello WTF !');
 });
-app.get('/', (req, res) => {
+app.get('/wtf', (req, res) => {
     res.send(' WTF !');
 });
 app.listen(port, () => {

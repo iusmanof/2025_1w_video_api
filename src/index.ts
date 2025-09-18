@@ -8,7 +8,7 @@ app.get('/', (req: Request, res: Response) => {
     .send('Hello WTF !')
 })
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/wtf', (req: Request, res: Response) => {
   res.send(' WTF !')
 })
 
