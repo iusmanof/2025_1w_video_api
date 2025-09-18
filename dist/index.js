@@ -11,6 +11,9 @@ app.get('/', (req, res) => {
         .sendStatus(200)
         .send('Hello WTF !');
 });
+app.get('/', (req, res) => {
+    res.send(' WTF !');
+});
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
