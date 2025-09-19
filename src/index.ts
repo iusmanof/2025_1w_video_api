@@ -63,11 +63,9 @@ app.get('/', (req: Request, res: Response) => {
 )
 
 app.get('/videos', (req: Request, res: Response<videoType[]>) => {
-  let foundVideo: videoType[] = dbVideo;
-
   res
     .status(HTTP_STATUS.OK_200)
-    .send(foundVideo)
+    .send(dbVideo)
 })
 
 app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
@@ -97,13 +95,13 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
 
   const createdVideo: videoType = {
     id: Math.floor(Math.random() * 1000000),
-    title: req.body.title,
-    author: req.body.author,
+    title: title!,
+    author: author!,
     canBeDownloaded: false,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
     publicationDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    availableResolutions: req.body.availableResolutions
+    availableResolutions: availableResolutions || []
 
   }
   dbVideo = [...dbVideo, createdVideo]

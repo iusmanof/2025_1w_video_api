@@ -31,10 +31,9 @@ app.get('/', (req, res) => {
     res.send('video api');
 });
 app.get('/videos', (req, res) => {
-    let foundVideo = dbVideo;
     res
         .status(exports.HTTP_STATUS.OK_200)
-        .send(foundVideo);
+        .send(dbVideo);
 });
 app.get('/videos/:id', (req, res) => {
     const foundVideo = dbVideo.find(v => v.id === +req.params.id);
@@ -59,13 +58,13 @@ app.post('/videos', (req, res) => {
     }
     const createdVideo = {
         id: Math.floor(Math.random() * 1000000),
-        title: req.body.title,
-        author: req.body.author,
+        title: title,
+        author: author,
         canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: new Date().toISOString(),
         publicationDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        availableResolutions: req.body.availableResolutions
+        availableResolutions: availableResolutions || []
     };
     dbVideo = [...dbVideo, createdVideo];
     res
