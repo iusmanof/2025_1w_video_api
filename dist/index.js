@@ -29,36 +29,36 @@ var Resolutions;
 // Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)
 let dbVideo = {
     content: [
-        {
-            id: 1,
-            title: "Video 1",
-            author: "Author 1",
-            canBeDownloaded: true,
-            minAgeRestriction: 18,
-            createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
-            publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-            availableResolutions: [Resolutions.P144, Resolutions.P240]
-        },
-        {
-            id: 2,
-            title: "Video 2",
-            author: "Author 2",
-            canBeDownloaded: true,
-            minAgeRestriction: 7,
-            createdAt: "Fri Sep 19 2025 04:20:20 GMT+0300 (Moscow Standard Time)",
-            publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-            availableResolutions: [Resolutions.P144, Resolutions.P240]
-        },
-        {
-            id: 3,
-            title: "Video 3",
-            author: "Author 3",
-            canBeDownloaded: true,
-            minAgeRestriction: 18,
-            createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
-            publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-            availableResolutions: [Resolutions.P144, Resolutions.P240]
-        }
+    // {
+    //   id: 1,
+    //   title: "Video 1",
+    //   author: "Author 1",
+    //   canBeDownloaded: true,
+    //   minAgeRestriction: 18,
+    //   createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
+    //   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
+    //   availableResolutions: [Resolutions.P144, Resolutions.P240]
+    // },
+    // {
+    //   id: 2,
+    //   title: "Video 2",
+    //   author: "Author 2",
+    //   canBeDownloaded: true,
+    //   minAgeRestriction: 7,
+    //   createdAt: "Fri Sep 19 2025 04:20:20 GMT+0300 (Moscow Standard Time)",
+    //   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
+    //   availableResolutions: [Resolutions.P144, Resolutions.P240]
+    // },
+    // {
+    //   id: 3,
+    //   title: "Video 3",
+    //   author: "Author 3",
+    //   canBeDownloaded: true,
+    //   minAgeRestriction: 18,
+    //   createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
+    //   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
+    //   availableResolutions: [Resolutions.P144, Resolutions.P240]
+    // }
     ]
 };
 app.get('/', (req, res) => {
@@ -112,6 +112,10 @@ app.put('/hometask_01/api/videos/:id', (req, res) => {
 app.delete('/hometask_01/api/videos/:id', (req, res) => {
     dbVideo.content = dbVideo.content.filter(v => v.id !== +req.params.id);
     res.send(exports.HTTP_STATUS.NO_CONTENT_204);
+});
+app.delete('/hometask_01/api/testing/all-data', (req, res) => {
+    dbVideo.content = [];
+    res.status(exports.HTTP_STATUS.NO_CONTENT_204).json({ description: "All data is deleted" });
 });
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
