@@ -132,7 +132,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   if (typeof canBeDownloaded === 'undefined') { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
   if (typeof canBeDownloaded !== "boolean") { errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" })}
   if (!publicationDate) errorMsg.push({message: "publicationDate is required", field: "publicationDate"})
-  if (isNaN(Date.parse(publicationDate))) errorMsg.push({message: "publicationDate must be a valid ISO date", field: "publicationDate"})
+  if (typeof publicationDate !== "string" || isNaN(Date.parse(publicationDate))) errorMsg.push({message: "publicationDate must be a valid ISO date", field: "publicationDate"})
 
   if (errorMsg.length > 0) {
     res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });

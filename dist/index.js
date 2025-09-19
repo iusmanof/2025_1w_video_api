@@ -103,7 +103,7 @@ app.put('/videos/:id', (req, res) => {
     }
     if (!publicationDate)
         errorMsg.push({ message: "publicationDate is required", field: "publicationDate" });
-    if (isNaN(Date.parse(publicationDate)))
+    if (typeof publicationDate !== "string" || isNaN(Date.parse(publicationDate)))
         errorMsg.push({ message: "publicationDate must be a valid ISO date", field: "publicationDate" });
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
