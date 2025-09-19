@@ -59,9 +59,13 @@ const dbVideo: { video: videoType[] } = {
     }]
 }
 
-app.get('/hometask_01/api/videos', (req: Request, res:  Response<videoType[]>) => {
-  const foundVideo: videoType[] = dbVideo.video;
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).send('video api')
+  }
+)
 
+app.get('/hometask_01/api/videos', (req: Request, res: Response<videoType[]>) => {
+  const foundVideo: videoType[] = dbVideo.video;
 
   res
     .status(HTTP_STATUS.OK_200)
