@@ -48,7 +48,7 @@ app.post('/videos', (req, res) => {
     const errorMsg = [];
     if (!title)
         errorMsg.push({ message: "Title is required", field: "title" });
-    if (title.length > 40)
+    if (title && title.length > 40)
         errorMsg.push({ message: "Title maxLength is 40", field: "title" });
     if (!author)
         errorMsg.push({ message: "Author is required", field: "author" });
