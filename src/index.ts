@@ -41,6 +41,15 @@ type videoTypeCreate = {
   "availableResolutions": Resolutions[],
 }
 
+type videoTypeUpdate= {
+  "title": string,
+  "author": string,
+  "availableResolutions": Resolutions[],
+  "canBeDownloaded":  boolean,
+  "minAgeRestriction":	number,
+  "publicationDate": string
+}
+
 let dbVideo: videoType[] = []
 
 app.get('/', (req: Request, res: Response) => {
@@ -86,7 +95,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
     .json(createdVideo)
 })
 
-app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeCreate>, res: Response) => {
+app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response) => {
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
   if (videoInd === -1) {
@@ -97,14 +106,17 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeCreate>, res: 
     ...dbVideo[videoInd],
     title: req.body.title,
     author: req.body.author,
-    availableResolutions: req.body.availableResolutions
+    availableResolutions: req.body.availableResolutions,
+    canBeDownloaded:  req.body.canBeDownloaded,
+    minAgeRestriction:	req.body.minAgeRestriction,
+    publicationDate: req.body.publicationDate
   }
 
   dbVideo = [
     ...dbVideo.slice(0, videoInd),
     videoUpdate,
     ...dbVideo.slice(videoInd + 1)
-  ]
+  ];
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 

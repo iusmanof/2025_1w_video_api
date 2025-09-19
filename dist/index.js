@@ -26,39 +26,7 @@ var Resolutions;
     Resolutions["P1440"] = "P1440";
     Resolutions["P2160"] = "P2160";
 })(Resolutions || (Resolutions = {}));
-// Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)
-let dbVideo = [
-// {
-//   id: 1,
-//   title: "Video 1",
-//   author: "Author 1",
-//   canBeDownloaded: true,
-//   minAgeRestriction: 18,
-//   createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
-//   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-//   availableResolutions: [Resolutions.P144, Resolutions.P240]
-// },
-// {
-//   id: 2,
-//   title: "Video 2",
-//   author: "Author 2",
-//   canBeDownloaded: true,
-//   minAgeRestriction: 7,
-//   createdAt: "Fri Sep 19 2025 04:20:20 GMT+0300 (Moscow Standard Time)",
-//   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-//   availableResolutions: [Resolutions.P144, Resolutions.P240]
-// },
-// {
-//   id: 3,
-//   title: "Video 3",
-//   author: "Author 3",
-//   canBeDownloaded: true,
-//   minAgeRestriction: 18,
-//   createdAt: "Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)",
-//   publicationDate: "Fri Sep 19 2025 05:40:00 GMT+0300 (Moscow Standard Time)",
-//   availableResolutions: [Resolutions.P144, Resolutions.P240]
-// }
-];
+let dbVideo = [];
 app.get('/', (req, res) => {
     res.send('video api');
 });
@@ -99,7 +67,7 @@ app.put('/videos/:id', (req, res) => {
     if (videoInd === -1) {
         res.status(exports.HTTP_STATUS.NOT_FOUND_404).json({ message: "Video not found." });
     }
-    const videoUpdate = Object.assign(Object.assign({}, dbVideo[videoInd]), { title: req.body.title, author: req.body.author, availableResolutions: req.body.availableResolutions });
+    const videoUpdate = Object.assign(Object.assign({}, dbVideo[videoInd]), { title: req.body.title, author: req.body.author, availableResolutions: req.body.availableResolutions, canBeDownloaded: req.body.canBeDownloaded, minAgeRestriction: req.body.minAgeRestriction, publicationDate: req.body.publicationDate });
     dbVideo = [
         ...dbVideo.slice(0, videoInd),
         videoUpdate,
