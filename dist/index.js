@@ -115,7 +115,7 @@ app.delete('/api/videos/:id', (req, res) => {
 });
 app.delete('/api/testing/all-data', (req, res) => {
     dbVideo.content = [];
-    res.status(exports.HTTP_STATUS.NO_CONTENT_204).json({ description: "All data is deleted" });
+    res.status(204).send("All data is deleted");
 });
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

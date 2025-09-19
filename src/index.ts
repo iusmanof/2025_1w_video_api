@@ -140,7 +140,8 @@ app.delete('/api/videos/:id', (req:Request<{id: number}>, res: Response) => {
 
 app.delete('/api/testing/all-data', (req: Request,res: Response) =>{
   dbVideo.content = []
-  res.status(HTTP_STATUS.NO_CONTENT_204).json({description: "All data is deleted"})
+
+  res.status(204).send("All data is deleted")
 })
 
 app.listen(port, () => {
