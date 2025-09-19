@@ -129,7 +129,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
   if (!availableResolutions || availableResolutions.length === 0) errorMsg.push({message: "At least one resolution should be added", field: "availableResolutions"})
   if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({ message:"minAgeRestriction max 18 min 1", field: "minAgeRestriction"})
-  if (!canBeDownloaded) { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
+  if (typeof canBeDownloaded === 'undefined') { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
   if (typeof canBeDownloaded !== "number") { errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" })}
 
   if (errorMsg.length > 0) {
