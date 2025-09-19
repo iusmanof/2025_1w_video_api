@@ -117,10 +117,10 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
-app.delete('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
-  const videoInd = dbVideo.findIndex(v => v.id !== +req.params.id)
+app.delete('/videos/:id', (req: Request<{ id: string }>, res: Response) => {
+  const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
   if(videoInd === -1) {
-    res.status(HTTP_STATUS.NOT_FOUND_404).send()
+    res.status(HTTP_STATUS.NOT_FOUND_404).send("Not found")
   }
 
   dbVideo = dbVideo.filter(v => v.id !== +req.params.id)

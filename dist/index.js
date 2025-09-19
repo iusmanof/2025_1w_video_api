@@ -73,9 +73,9 @@ app.put('/videos/:id', (req, res) => {
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
 });
 app.delete('/videos/:id', (req, res) => {
-    const videoInd = dbVideo.findIndex(v => v.id !== +req.params.id);
+    const videoInd = dbVideo.findIndex(v => v.id === +req.params.id);
     if (videoInd === -1) {
-        res.status(exports.HTTP_STATUS.NOT_FOUND_404).send();
+        res.status(exports.HTTP_STATUS.NOT_FOUND_404).send("Not found");
     }
     dbVideo = dbVideo.filter(v => v.id !== +req.params.id);
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
