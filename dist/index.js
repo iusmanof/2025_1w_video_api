@@ -98,6 +98,9 @@ app.put('/videos/:id', (req, res) => {
     if (!canBeDownloaded) {
         errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" });
     }
+    if (typeof canBeDownloaded !== "number") {
+        errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" });
+    }
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }
