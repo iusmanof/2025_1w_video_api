@@ -72,7 +72,7 @@ app.get('/', (req: Request, res: Response) => {
   }
 )
 
-app.get('/hometask_01/api/videos', (req: Request, res: Response<videoType[]>) => {
+app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
   // if (!dbVideo.content) {
   //   res.send(404)
   // }
@@ -83,7 +83,7 @@ app.get('/hometask_01/api/videos', (req: Request, res: Response<videoType[]>) =>
     .send(foundVideo)
 })
 
-app.get('/hometask_01/api/videos/:id', (req: Request<{id: number}>, res: Response) => {
+app.get('/api/videos/:id', (req: Request<{id: number}>, res: Response) => {
   const foundVideo : videoType | undefined = dbVideo.content.find(v => v.id === +req.params.id)
 
   if (!foundVideo) {
@@ -92,7 +92,7 @@ app.get('/hometask_01/api/videos/:id', (req: Request<{id: number}>, res: Respons
   res.status(200).json(foundVideo)
 })
 
-app.post('/hometask_01/api/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoType>) => {
+app.post('/api/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoType>) => {
   const createdVideo: videoType = {
     id: Math.floor(Math.random() * 1000000),
     title: req.body.title,
@@ -110,7 +110,7 @@ app.post('/hometask_01/api/videos', (req: Request<{},{}, videoTypeCreate>, res: 
     .json(createdVideo)
 })
 
-app.put('/hometask_01/api/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
+app.put('/api/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
   const videoInd = dbVideo.content.findIndex(v => v.id === +req.params.id)
 
   if(!videoInd){
@@ -132,13 +132,13 @@ app.put('/hometask_01/api/videos/:id', (req:Request<{id:number},{},videoTypeCrea
   res.status(HTTP_STATUS.NO_CONTENT_204).send(videoUpdate)
 })
 
-app.delete('/hometask_01/api/videos/:id', (req:Request<{id: number}>, res: Response) => {
+app.delete('/api/videos/:id', (req:Request<{id: number}>, res: Response) => {
   dbVideo.content = dbVideo.content.filter(v => v.id !== +req.params.id)
 
   res.send(HTTP_STATUS.NO_CONTENT_204)
 })
 
-app.delete('/hometask_01/api/testing/all-data', (req: Request,res: Response) =>{
+app.delete('/api/testing/all-data', (req: Request,res: Response) =>{
   dbVideo.content = []
   res.status(HTTP_STATUS.NO_CONTENT_204).json({description: "All data is deleted"})
 })

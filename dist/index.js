@@ -64,7 +64,7 @@ let dbVideo = {
 app.get('/', (req, res) => {
     res.send('video api');
 });
-app.get('/hometask_01/api/videos', (req, res) => {
+app.get('/api/videos', (req, res) => {
     // if (!dbVideo.content) {
     //   res.send(404)
     // }
@@ -73,14 +73,14 @@ app.get('/hometask_01/api/videos', (req, res) => {
         .status(exports.HTTP_STATUS.OK_200)
         .send(foundVideo);
 });
-app.get('/hometask_01/api/videos/:id', (req, res) => {
+app.get('/api/videos/:id', (req, res) => {
     const foundVideo = dbVideo.content.find(v => v.id === +req.params.id);
     if (!foundVideo) {
         res.status(exports.HTTP_STATUS.NOT_FOUND_404).send("No video found.");
     }
     res.status(200).json(foundVideo);
 });
-app.post('/hometask_01/api/videos', (req, res) => {
+app.post('/api/videos', (req, res) => {
     const createdVideo = {
         id: Math.floor(Math.random() * 1000000),
         title: req.body.title,
@@ -96,7 +96,7 @@ app.post('/hometask_01/api/videos', (req, res) => {
         .status(exports.HTTP_STATUS.CREATED_201)
         .json(createdVideo);
 });
-app.put('/hometask_01/api/videos/:id', (req, res) => {
+app.put('/api/videos/:id', (req, res) => {
     const videoInd = dbVideo.content.findIndex(v => v.id === +req.params.id);
     if (!videoInd) {
         res.status(exports.HTTP_STATUS.NOT_FOUND_404).json({ message: "Video not found." });
@@ -109,11 +109,11 @@ app.put('/hometask_01/api/videos/:id', (req, res) => {
     ];
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).send(videoUpdate);
 });
-app.delete('/hometask_01/api/videos/:id', (req, res) => {
+app.delete('/api/videos/:id', (req, res) => {
     dbVideo.content = dbVideo.content.filter(v => v.id !== +req.params.id);
     res.send(exports.HTTP_STATUS.NO_CONTENT_204);
 });
-app.delete('/hometask_01/api/testing/all-data', (req, res) => {
+app.delete('/api/testing/all-data', (req, res) => {
     dbVideo.content = [];
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).json({ description: "All data is deleted" });
 });
