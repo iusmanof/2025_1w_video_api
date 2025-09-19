@@ -80,7 +80,7 @@ app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
 })
 
 app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType | {
-  errorMessages: ErrorMesage[]
+  errorsMessages: ErrorMesage[]
 }>) => {
   const {title, author, availableResolutions} = req.body
 
@@ -91,7 +91,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
   if (!availableResolutions) errorMsg.push({message: "AvailableResolutions is required", field: "availableResolutions"})
 
   if (errorMsg.length > 0) {
-    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorMessages: errorMsg})
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages: errorMsg})
   }
 
   const createdVideo: videoType = {

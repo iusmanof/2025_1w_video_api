@@ -53,7 +53,7 @@ app.post('/videos', (req, res) => {
     if (!availableResolutions)
         errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" });
     if (errorMsg.length > 0) {
-        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorMessages: errorMsg });
+        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }
     const createdVideo = {
         id: Math.floor(Math.random() * 1000000),
