@@ -63,7 +63,7 @@ const dbVideo = {
 app.get('/', (req, res) => {
     res.send('video api');
 });
-app.get('/api/videos', (req, res) => {
+app.get('/hometask_01/api/videos', (req, res) => {
     const foundVideo = dbVideo.video;
     res
         .status(exports.HTTP_STATUS.OK_200)

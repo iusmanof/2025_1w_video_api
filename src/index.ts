@@ -64,7 +64,7 @@ app.get('/', (req: Request, res: Response) => {
   }
 )
 
-app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
+app.get('/hometask_01/api/videos', (req: Request, res: Response<videoType[]>) => {
   const foundVideo: videoType[] = dbVideo.video;
 
   res
