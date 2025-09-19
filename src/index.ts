@@ -87,6 +87,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
   if (!title) errorMsg.push({message: "Title is required", field: "title"})
   if (title && title.length > 40) errorMsg.push({message: "Title maxLength is 40", field: "title"})
   if (!author) errorMsg.push({message: "Author is required", field: "author"})
+  if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
   if (!availableResolutions) errorMsg.push({message: "AvailableResolutions is required", field: "availableResolutions"})
 
   if (errorMsg.length > 0) {
