@@ -32,8 +32,8 @@ type videoTypeCreate = {
   "availableResolutions": Resolutions[],
 }
 // Fri Sep 19 2025 04:37:29 GMT+0300 (Moscow Standard Time)
-let dbVideo: { content: videoType[] } = {
-  content: [
+let dbVideo: videoType[] =
+  [
     // {
     //   id: 1,
     //   title: "Video 1",
@@ -65,7 +65,6 @@ let dbVideo: { content: videoType[] } = {
     //   availableResolutions: [Resolutions.P144, Resolutions.P240]
     // }
     ]
-}
 
 app.get('/', (req: Request, res: Response) => {
     res.send('video api')
@@ -76,7 +75,7 @@ app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
   // if (!dbVideo.content) {
   //   res.send(404)
   // }
-  let foundVideo: videoType[] = dbVideo.content;
+  let foundVideo: videoType[] = dbVideo;
 
   res
     .status(HTTP_STATUS.OK_200)
@@ -84,7 +83,7 @@ app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
 })
 
 app.get('/api/videos/:id', (req: Request<{id: number}>, res: Response) => {
-  const foundVideo : videoType | undefined = dbVideo.content.find(v => v.id === +req.params.id)
+  const foundVideo : videoType | undefined = dbVideo.find(v => v.id === +req.params.id)
 
   if (!foundVideo) {
     res.status(HTTP_STATUS.NOT_FOUND_404).send("No video found.")
@@ -104,42 +103,42 @@ app.post('/api/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<vid
     availableResolutions: req.body.availableResolutions
 
   }
-  dbVideo.content = [ ...dbVideo.content , createdVideo]
+  dbVideo = [ ...dbVideo , createdVideo]
   res
     .status(HTTP_STATUS.CREATED_201)
     .json(createdVideo)
 })
 
 app.put('/api/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
-  const videoInd = dbVideo.content.findIndex(v => v.id === +req.params.id)
+  const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
   if(!videoInd){
     res.status(HTTP_STATUS.NOT_FOUND_404).json({message:"Video not found."})
   }
 
   const videoUpdate: videoType = {
-    ...dbVideo.content[videoInd],
+    ...dbVideo[videoInd],
     title: req.body.title,
     author: req.body.author,
     availableResolutions: req.body.availableResolutions
   }
 
-  dbVideo.content= [
-    ...dbVideo.content.slice(0,videoInd),
+  dbVideo= [
+    ...dbVideo.slice(0,videoInd),
     videoUpdate,
-    ...dbVideo.content.slice(videoInd+1)
+    ...dbVideo.slice(videoInd+1)
   ]
   res.status(HTTP_STATUS.NO_CONTENT_204).send(videoUpdate)
 })
 
 app.delete('/api/videos/:id', (req:Request<{id: number}>, res: Response) => {
-  dbVideo.content = dbVideo.content.filter(v => v.id !== +req.params.id)
+  dbVideo = dbVideo.filter(v => v.id !== +req.params.id)
 
   res.send(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.delete('/api/testing/all-data', (req: Request,res: Response) =>{
-  dbVideo.content = []
+  dbVideo = []
 
   res.status(204).send("All data is deleted")
 })
