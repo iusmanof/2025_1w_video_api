@@ -41,20 +41,19 @@ type videoTypeCreate = {
   "availableResolutions": Resolutions[],
 }
 
-type videoTypeUpdate= {
+type videoTypeUpdate = {
   "title": string,
   "author": string,
   "availableResolutions": Resolutions[],
-  "canBeDownloaded":  boolean,
-  "minAgeRestriction":	number,
+  "canBeDownloaded": boolean,
+  "minAgeRestriction": number,
   "publicationDate": string
 }
 
-type ErrorMesage ={
+type ErrorMesage = {
   "message": string,
-  "field" : string,
+  "field": string,
 }
-
 
 let dbVideo: videoType[] = []
 
@@ -80,17 +79,19 @@ app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
   res.status(200).json(foundVideo)
 })
 
-app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType | {errorMessages: ErrorMesage[]}>) => {
+app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType | {
+  errorMessages: ErrorMesage[]
+}>) => {
   const {title, author, availableResolutions} = req.body
 
   const errorMsg: ErrorMesage[] = []
 
-  if(!title) errorMsg.push({ message: "Title is required", field: "title" })
-  if(!author) errorMsg.push({ message: "Author is required", field: "author" })
-  if(!availableResolutions) errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" })
+  if (!title) errorMsg.push({message: "Title is required", field: "title"})
+  if (!author) errorMsg.push({message: "Author is required", field: "author"})
+  if (!availableResolutions) errorMsg.push({message: "AvailableResolutions is required", field: "availableResolutions"})
 
-  if(errorMsg.length > 0){
-    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorMessages: errorMsg })
+  if (errorMsg.length > 0) {
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorMessages: errorMsg})
   }
 
   const createdVideo: videoType = {
@@ -122,8 +123,8 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
     title: req.body.title,
     author: req.body.author,
     availableResolutions: req.body.availableResolutions,
-    canBeDownloaded:  req.body.canBeDownloaded,
-    minAgeRestriction:	req.body.minAgeRestriction,
+    canBeDownloaded: req.body.canBeDownloaded,
+    minAgeRestriction: req.body.minAgeRestriction,
     publicationDate: req.body.publicationDate
   }
 
@@ -137,7 +138,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
 
 app.delete('/videos/:id', (req: Request<{ id: string }>, res: Response) => {
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
-  if(videoInd === -1) {
+  if (videoInd === -1) {
     res.status(HTTP_STATUS.NOT_FOUND_404).send("Not found")
   }
 
@@ -154,6 +155,5 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-
 
 export default app;
