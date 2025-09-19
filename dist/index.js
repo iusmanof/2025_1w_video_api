@@ -76,7 +76,7 @@ app.post('/videos', (req, res) => {
         .json(createdVideo);
 });
 app.put('/videos/:id', (req, res) => {
-    const { title, author, availableResolutions, minAgeRestriction, canBeDownloaded } = req.body;
+    const { title, author, availableResolutions, minAgeRestriction, canBeDownloaded, publicationDate } = req.body;
     const videoInd = dbVideo.findIndex(v => v.id === +req.params.id);
     const errorMsg = [];
     if (videoInd === -1) {
@@ -101,6 +101,10 @@ app.put('/videos/:id', (req, res) => {
     if (typeof canBeDownloaded !== "boolean") {
         errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" });
     }
+    if (!publicationDate)
+        errorMsg.push({ message: "publicationDate is required", field: "publicationDate" });
+    if (isNaN(Date.parse(publicationDate)))
+        errorMsg.push({ message: "publicationDate must be a valid ISO date", field: "publicationDate" });
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }

@@ -113,7 +113,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
 })
 
 app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
-  const {title, author, availableResolutions, minAgeRestriction, canBeDownloaded} = req.body
+  const {title, author, availableResolutions, minAgeRestriction, canBeDownloaded, publicationDate} = req.body
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
   const errorMsg: ErrorMesage[] = []
@@ -131,6 +131,8 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({ message:"minAgeRestriction max 18 min 1", field: "minAgeRestriction"})
   if (typeof canBeDownloaded === 'undefined') { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
   if (typeof canBeDownloaded !== "boolean") { errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" })}
+  if (!publicationDate) errorMsg.push({message: "publicationDate is required", field: "publicationDate"})
+  if (isNaN(Date.parse(publicationDate))) errorMsg.push({message: "publicationDate must be a valid ISO date", field: "publicationDate"})
 
   if (errorMsg.length > 0) {
     res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
