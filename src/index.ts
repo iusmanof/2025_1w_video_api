@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 
 const app = express()
 const port = process.env.port || 3000
+app.use(express.json());
 
 export const HTTP_STATUS = {
   OK_200: 200,

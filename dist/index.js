@@ -7,6 +7,7 @@ exports.HTTP_STATUS = void 0;
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = process.env.port || 3000;
+app.use(express_1.default.json());
 exports.HTTP_STATUS = {
     OK_200: 200,
     CREATED_201: 201,
