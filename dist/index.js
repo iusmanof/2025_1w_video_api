@@ -86,7 +86,7 @@ app.post('/videos', (req, res) => {
         canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: new Date().toISOString(),
-        publicationDate: new Date(Date.now() + 1).toISOString(),
+        publicationDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         availableResolutions: req.body.availableResolutions
     };
     dbVideo = [...dbVideo, createdVideo];

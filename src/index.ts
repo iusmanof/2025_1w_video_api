@@ -99,7 +99,7 @@ app.post('/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoTy
     canBeDownloaded: false,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
-    publicationDate: new Date(Date.now() + 1).toISOString(),
+    publicationDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     availableResolutions: req.body.availableResolutions
 
   }
