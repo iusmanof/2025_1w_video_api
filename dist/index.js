@@ -81,7 +81,7 @@ app.put('/videos/:id', (req, res) => {
     const errorMsg = [];
     if (videoInd === -1) {
         errorMsg.push({ message: "id is not fine", field: "id" });
-        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+        res.status(exports.HTTP_STATUS.NOT_FOUND_404).json({ errorsMessages: errorMsg });
     }
     if (!title)
         errorMsg.push({ message: "Title is required", field: "title" });
