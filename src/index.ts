@@ -58,9 +58,6 @@ app.get('/', (req: Request, res: Response) => {
 )
 
 app.get('/videos', (req: Request, res: Response<videoType[]>) => {
-  // if (!dbVideo.content) {
-  //   res.send(404)
-  // }
   let foundVideo: videoType[] = dbVideo;
 
   res
