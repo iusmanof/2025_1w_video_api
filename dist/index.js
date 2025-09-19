@@ -61,9 +61,9 @@ const dbVideo = {
     ]
 };
 app.get('/', (req, res) => {
-    res.status(200).send('video api');
+    res.send('video api');
 });
-app.get('/hometask_01/api/videos', (req, res) => {
+app.get('/api/videos', (req, res) => {
     const foundVideo = dbVideo.video;
     res
         .status(exports.HTTP_STATUS.OK_200)
@@ -75,3 +75,4 @@ app.get('/wtf', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+exports.default = app;
