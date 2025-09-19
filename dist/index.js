@@ -96,7 +96,7 @@ app.post('/videos', (req, res) => {
 });
 app.put('/videos/:id', (req, res) => {
     const videoInd = dbVideo.findIndex(v => v.id === +req.params.id);
-    if (!videoInd) {
+    if (videoInd === -1) {
         res.status(exports.HTTP_STATUS.NOT_FOUND_404).json({ message: "Video not found." });
     }
     const videoUpdate = Object.assign(Object.assign({}, dbVideo[videoInd]), { title: req.body.title, author: req.body.author, availableResolutions: req.body.availableResolutions });
@@ -105,11 +105,11 @@ app.put('/videos/:id', (req, res) => {
         videoUpdate,
         ...dbVideo.slice(videoInd + 1)
     ];
-    res.status(exports.HTTP_STATUS.NO_CONTENT_204).send(videoUpdate);
+    res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
 });
 app.delete('/videos/:id', (req, res) => {
     dbVideo = dbVideo.filter(v => v.id !== +req.params.id);
-    res.send(exports.HTTP_STATUS.NO_CONTENT_204);
+    res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
 });
 app.delete('/testing/all-data', (req, res) => {
     dbVideo = [];

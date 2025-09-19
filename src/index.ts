@@ -112,7 +112,7 @@ app.post('/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoTy
 app.put('/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
-  if(!videoInd){
+  if(videoInd === -1){
     res.status(HTTP_STATUS.NOT_FOUND_404).json({message:"Video not found."})
   }
 
@@ -128,13 +128,13 @@ app.put('/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Respon
     videoUpdate,
     ...dbVideo.slice(videoInd+1)
   ]
-  res.status(HTTP_STATUS.NO_CONTENT_204).send(videoUpdate)
+  res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
 app.delete('/videos/:id', (req:Request<{id: number}>, res: Response) => {
   dbVideo = dbVideo.filter(v => v.id !== +req.params.id)
 
-  res.send(HTTP_STATUS.NO_CONTENT_204)
+  res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
 app.delete('/testing/all-data', (req: Request,res: Response) =>{
