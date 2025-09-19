@@ -71,7 +71,7 @@ app.get('/', (req: Request, res: Response) => {
   }
 )
 
-app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
+app.get('/videos', (req: Request, res: Response<videoType[]>) => {
   // if (!dbVideo.content) {
   //   res.send(404)
   // }
@@ -82,7 +82,7 @@ app.get('/api/videos', (req: Request, res: Response<videoType[]>) => {
     .send(foundVideo)
 })
 
-app.get('/api/videos/:id', (req: Request<{id: number}>, res: Response) => {
+app.get('/videos/:id', (req: Request<{id: number}>, res: Response) => {
   const foundVideo : videoType | undefined = dbVideo.find(v => v.id === +req.params.id)
 
   if (!foundVideo) {
@@ -91,7 +91,7 @@ app.get('/api/videos/:id', (req: Request<{id: number}>, res: Response) => {
   res.status(200).json(foundVideo)
 })
 
-app.post('/api/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoType>) => {
+app.post('/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<videoType>) => {
   const createdVideo: videoType = {
     id: Math.floor(Math.random() * 1000000),
     title: req.body.title,
@@ -109,7 +109,7 @@ app.post('/api/videos', (req: Request<{},{}, videoTypeCreate>, res: Response<vid
     .json(createdVideo)
 })
 
-app.put('/api/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
+app.put('/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Response) =>{
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
   if(!videoInd){
@@ -131,13 +131,13 @@ app.put('/api/videos/:id', (req:Request<{id:number},{},videoTypeCreate>, res: Re
   res.status(HTTP_STATUS.NO_CONTENT_204).send(videoUpdate)
 })
 
-app.delete('/api/videos/:id', (req:Request<{id: number}>, res: Response) => {
+app.delete('/videos/:id', (req:Request<{id: number}>, res: Response) => {
   dbVideo = dbVideo.filter(v => v.id !== +req.params.id)
 
   res.send(HTTP_STATUS.NO_CONTENT_204)
 })
 
-app.delete('/api/testing/all-data', (req: Request,res: Response) =>{
+app.delete('/testing/all-data', (req: Request,res: Response) =>{
   dbVideo = []
 
   res.status(204).send("All data is deleted")
