@@ -112,15 +112,16 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
     .json(createdVideo)
 })
 
-app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response) => {
+app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
   const {title, author, availableResolutions, minAgeRestriction} = req.body
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
-  if (videoInd === -1) {
-    res.status(HTTP_STATUS.NOT_FOUND_404).json({message: "Video not found."})
-  }
-
   const errorMsg: ErrorMesage[] = []
+
+  if (videoInd === -1) {
+    errorMsg.push({message: "id is not fine", field: "id"})
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+  }
 
   if (!title) errorMsg.push({message: "Title is required", field: "title"})
   if (title && title.length > 40) errorMsg.push({message: "Title maxLength is 40", field: "title"})
@@ -130,7 +131,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({ message:"minAgeRestriction max 18 min 1", field: "minAgeRestriction"})
 
   if (errorMsg.length > 0) {
-    return res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
   }
 
   const videoUpdate: videoType = {

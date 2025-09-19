@@ -78,10 +78,11 @@ app.post('/videos', (req, res) => {
 app.put('/videos/:id', (req, res) => {
     const { title, author, availableResolutions, minAgeRestriction } = req.body;
     const videoInd = dbVideo.findIndex(v => v.id === +req.params.id);
-    if (videoInd === -1) {
-        res.status(exports.HTTP_STATUS.NOT_FOUND_404).json({ message: "Video not found." });
-    }
     const errorMsg = [];
+    if (videoInd === -1) {
+        errorMsg.push({ message: "id is not fine", field: "id" });
+        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+    }
     if (!title)
         errorMsg.push({ message: "Title is required", field: "title" });
     if (title && title.length > 40)
@@ -95,7 +96,7 @@ app.put('/videos/:id', (req, res) => {
     if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1))
         errorMsg.push({ message: "minAgeRestriction max 18 min 1", field: "minAgeRestriction" });
     if (errorMsg.length > 0) {
-        return res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }
     const videoUpdate = Object.assign(Object.assign({}, dbVideo[videoInd]), { title: req.body.title, author: req.body.author, availableResolutions: req.body.availableResolutions, canBeDownloaded: req.body.canBeDownloaded, minAgeRestriction: req.body.minAgeRestriction, publicationDate: req.body.publicationDate });
     dbVideo = [
