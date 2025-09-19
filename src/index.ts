@@ -89,7 +89,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
   if (!author) errorMsg.push({message: "Author is required", field: "author"})
   if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
   if (!availableResolutions) errorMsg.push({message: "AvailableResolutions is required", field: "availableResolutions"})
-  if (availableResolutions.every(r => Object.values(Resolutions).includes(r))) errorMsg.push({message: "AvailableResolutions Invalid", field: "availableResolutions"})
+  if (availableResolutions && !availableResolutions.every(r => Object.values(Resolutions).includes(r))) errorMsg.push({message: "AvailableResolutions Invalid", field: "availableResolutions"})
 
   if (errorMsg.length > 0) {
     res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages: errorMsg})

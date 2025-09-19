@@ -55,7 +55,7 @@ app.post('/videos', (req, res) => {
         errorMsg.push({ message: "Author max length is 20", field: "author" });
     if (!availableResolutions)
         errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" });
-    if (availableResolutions.every(r => Object.values(Resolutions).includes(r)))
+    if (availableResolutions && !availableResolutions.every(r => Object.values(Resolutions).includes(r)))
         errorMsg.push({ message: "AvailableResolutions Invalid", field: "availableResolutions" });
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
