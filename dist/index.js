@@ -98,7 +98,7 @@ app.put('/videos/:id', (req, res) => {
     if (typeof canBeDownloaded === 'undefined') {
         errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" });
     }
-    if (typeof canBeDownloaded !== "number") {
+    if (typeof canBeDownloaded !== "boolean") {
         errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" });
     }
     if (errorMsg.length > 0) {
