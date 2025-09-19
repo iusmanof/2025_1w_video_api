@@ -31,9 +31,6 @@ app.get('/', (req, res) => {
     res.send('video api');
 });
 app.get('/videos', (req, res) => {
-    // if (!dbVideo.content) {
-    //   res.send(404)
-    // }
     let foundVideo = dbVideo;
     res
         .status(exports.HTTP_STATUS.OK_200)
@@ -76,6 +73,10 @@ app.put('/videos/:id', (req, res) => {
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
 });
 app.delete('/videos/:id', (req, res) => {
+    const videoInd = dbVideo.findIndex(v => v.id !== +req.params.id);
+    if (videoInd === -1) {
+        res.status(exports.HTTP_STATUS.NOT_FOUND_404).send();
+    }
     dbVideo = dbVideo.filter(v => v.id !== +req.params.id);
     res.status(exports.HTTP_STATUS.NO_CONTENT_204).send();
 });

@@ -118,8 +118,12 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
 })
 
 app.delete('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
-  dbVideo = dbVideo.filter(v => v.id !== +req.params.id)
+  const videoInd = dbVideo.findIndex(v => v.id !== +req.params.id)
+  if(videoInd === -1) {
+    res.status(HTTP_STATUS.NOT_FOUND_404).send()
+  }
 
+  dbVideo = dbVideo.filter(v => v.id !== +req.params.id)
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
