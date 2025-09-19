@@ -76,7 +76,7 @@ app.post('/videos', (req, res) => {
         .json(createdVideo);
 });
 app.put('/videos/:id', (req, res) => {
-    const { title, author, availableResolutions, minAgeRestriction } = req.body;
+    const { title, author, availableResolutions, minAgeRestriction, canBeDownloaded } = req.body;
     const videoInd = dbVideo.findIndex(v => v.id === +req.params.id);
     const errorMsg = [];
     if (videoInd === -1) {
@@ -95,6 +95,9 @@ app.put('/videos/:id', (req, res) => {
         errorMsg.push({ message: "At least one resolution should be added", field: "availableResolutions" });
     if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1))
         errorMsg.push({ message: "minAgeRestriction max 18 min 1", field: "minAgeRestriction" });
+    if (!canBeDownloaded) {
+        errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" });
+    }
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }

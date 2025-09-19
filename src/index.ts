@@ -113,7 +113,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
 })
 
 app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
-  const {title, author, availableResolutions, minAgeRestriction} = req.body
+  const {title, author, availableResolutions, minAgeRestriction, canBeDownloaded} = req.body
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
   const errorMsg: ErrorMesage[] = []
@@ -129,6 +129,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
   if (!availableResolutions || availableResolutions.length === 0) errorMsg.push({message: "At least one resolution should be added", field: "availableResolutions"})
   if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({ message:"minAgeRestriction max 18 min 1", field: "minAgeRestriction"})
+  if (!canBeDownloaded) { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
 
   if (errorMsg.length > 0) {
     res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
