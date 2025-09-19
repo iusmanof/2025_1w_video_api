@@ -44,6 +44,17 @@ app.get('/videos/:id', (req, res) => {
     res.status(200).json(foundVideo);
 });
 app.post('/videos', (req, res) => {
+    const { title, author, availableResolutions } = req.body;
+    const errorMsg = [];
+    if (!title)
+        errorMsg.push({ message: "Title is required", field: "title" });
+    if (!author)
+        errorMsg.push({ message: "Author is required", field: "author" });
+    if (!availableResolutions)
+        errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" });
+    if (errorMsg.length > 0) {
+        res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorMessages: errorMsg });
+    }
     const createdVideo = {
         id: Math.floor(Math.random() * 1000000),
         title: req.body.title,

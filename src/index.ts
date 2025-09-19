@@ -50,6 +50,12 @@ type videoTypeUpdate= {
   "publicationDate": string
 }
 
+type ErrorMesage ={
+  "message": string,
+  "field" : string,
+}
+
+
 let dbVideo: videoType[] = []
 
 app.get('/', (req: Request, res: Response) => {
@@ -74,7 +80,19 @@ app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
   res.status(200).json(foundVideo)
 })
 
-app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType>) => {
+app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType | {errorMessages: ErrorMesage[]}>) => {
+  const {title, author, availableResolutions} = req.body
+
+  const errorMsg: ErrorMesage[] = []
+
+  if(!title) errorMsg.push({ message: "Title is required", field: "title" })
+  if(!author) errorMsg.push({ message: "Author is required", field: "author" })
+  if(!availableResolutions) errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" })
+
+  if(errorMsg.length > 0){
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorMessages: errorMsg })
+  }
+
   const createdVideo: videoType = {
     id: Math.floor(Math.random() * 1000000),
     title: req.body.title,
