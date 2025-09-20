@@ -1,4 +1,6 @@
 import express, {Request, Response} from "express";
+import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "./types";
+import {VideoCreateModel} from "./models/VideoCreateModel";
 
 const app = express()
 const port = process.env.port || 3000
@@ -13,7 +15,7 @@ export const HTTP_STATUS = {
   NOT_FOUND_404: 404
 }
 
-enum Resolutions {
+export enum Resolutions {
   P144 = "P144",
   P240 = "P240",
   P360 = "P360",
@@ -34,12 +36,12 @@ type videoType = {
   publicationDate: string,
   availableResolutions: Resolutions[],
 }
-
-type videoTypeCreate = {
-  "title": string,
-  "author": string,
-  "availableResolutions": Resolutions[],
-}
+//
+// type videoTypeCreate = {
+//   title: string,
+//   author: string,
+//   availableResolutions: Resolutions[],
+// }
 
 type videoTypeUpdate = {
   "title": string,
@@ -68,7 +70,7 @@ app.get('/videos', (req: Request, res: Response<videoType[]>) => {
     .send(dbVideo)
 })
 
-app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
+app.get('/videos/:id', (req: RequestWithParams<{ id: number }>, res: Response) => {
   const foundVideo: videoType | undefined = dbVideo.find(v => v.id === +req.params.id)
 
   if (!foundVideo) {
@@ -77,7 +79,7 @@ app.get('/videos/:id', (req: Request<{ id: number }>, res: Response) => {
   res.status(200).json(foundVideo)
 })
 
-app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoType | {
+app.post('/videos', (req: RequestWithBody<VideoCreateModel>, res: Response<videoType | {
   errorsMessages: ErrorMesage[]
 }>) => {
   const {title, author, availableResolutions} = req.body
@@ -112,7 +114,7 @@ app.post('/videos', (req: Request<{}, {}, videoTypeCreate>, res: Response<videoT
     .json(createdVideo)
 })
 
-app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
+app.put('/videos/:id', (req: RequestWithParamsAndBody<{ id: number }, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
   const {title, author, availableResolutions, minAgeRestriction, canBeDownloaded, publicationDate} = req.body
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
@@ -156,7 +158,7 @@ app.put('/videos/:id', (req: Request<{ id: number }, {}, videoTypeUpdate>, res: 
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
-app.delete('/videos/:id', (req: Request<{ id: string }>, res: Response) => {
+app.delete('/videos/:id', (req: RequestWithParams<{ id: string }>, res: Response) => {
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
   if (videoInd === -1) {
     res.status(HTTP_STATUS.NOT_FOUND_404).send("Not found")
