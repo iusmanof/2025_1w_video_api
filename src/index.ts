@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "./types";
-import {VideoCreateModel} from "./models/VideoCreateModel";
+import {ErrorMessage, VideoCreateModel, videoType, VideoUpdateModel} from "./models/VideoCreateModel";
 
 const app = express()
 const port = process.env.port || 3000
@@ -26,37 +26,6 @@ export enum Resolutions {
   P2160 = "P2160"
 }
 
-type videoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: number | null,
-  createdAt: string,
-  publicationDate: string,
-  availableResolutions: Resolutions[],
-}
-//
-// type videoTypeCreate = {
-//   title: string,
-//   author: string,
-//   availableResolutions: Resolutions[],
-// }
-
-type videoTypeUpdate = {
-  "title": string,
-  "author": string,
-  "availableResolutions": Resolutions[],
-  "canBeDownloaded": boolean,
-  "minAgeRestriction": number,
-  "publicationDate": string
-}
-
-type ErrorMesage = {
-  "message": string,
-  "field": string,
-}
-
 let dbVideo: videoType[] = []
 
 app.get('/', (req: Request, res: Response) => {
@@ -80,18 +49,21 @@ app.get('/videos/:id', (req: RequestWithParams<{ id: number }>, res: Response) =
 })
 
 app.post('/videos', (req: RequestWithBody<VideoCreateModel>, res: Response<videoType | {
-  errorsMessages: ErrorMesage[]
+  errorsMessages: ErrorMessage[]
 }>) => {
   const {title, author, availableResolutions} = req.body
 
-  const errorMsg: ErrorMesage[] = []
+  const errorMsg: ErrorMessage[] = []
 
   if (!title) errorMsg.push({message: "Title is required", field: "title"})
   if (title && title.length > 40) errorMsg.push({message: "Title maxLength is 40", field: "title"})
   if (!author) errorMsg.push({message: "Author is required", field: "author"})
-  if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
+  if (author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
   if (!availableResolutions) errorMsg.push({message: "AvailableResolutions is required", field: "availableResolutions"})
-  if (availableResolutions && !availableResolutions.every(r => Object.values(Resolutions).includes(r))) errorMsg.push({message: "AvailableResolutions Invalid", field: "availableResolutions"})
+  if (availableResolutions && !availableResolutions.every(r => Object.values(Resolutions).includes(r))) errorMsg.push({
+    message: "AvailableResolutions Invalid",
+    field: "availableResolutions"
+  })
 
   if (errorMsg.length > 0) {
     res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages: errorMsg})
@@ -114,30 +86,45 @@ app.post('/videos', (req: RequestWithBody<VideoCreateModel>, res: Response<video
     .json(createdVideo)
 })
 
-app.put('/videos/:id', (req: RequestWithParamsAndBody<{ id: number }, videoTypeUpdate>, res: Response<videoType | { errorsMessages: ErrorMesage[] } >) => {
+app.put('/videos/:id', (req: RequestWithParamsAndBody<{ id: number }, VideoUpdateModel>, res: Response<videoType | {
+  errorsMessages: ErrorMessage[]
+}>) => {
   const {title, author, availableResolutions, minAgeRestriction, canBeDownloaded, publicationDate} = req.body
   const videoInd = dbVideo.findIndex(v => v.id === +req.params.id)
 
-  const errorMsg: ErrorMesage[] = []
+  const errorMsg: ErrorMessage[] = []
 
   if (videoInd === -1) {
     errorMsg.push({message: "id is not fine", field: "id"})
-    res.status(HTTP_STATUS.NOT_FOUND_404).json({ errorsMessages: errorMsg });
+    res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: errorMsg});
   }
 
   if (!title) errorMsg.push({message: "Title is required", field: "title"})
   if (title && title.length > 40) errorMsg.push({message: "Title maxLength is 40", field: "title"})
   if (!author) errorMsg.push({message: "Author is required", field: "author"})
-  if(author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
-  if (!availableResolutions || availableResolutions.length === 0) errorMsg.push({message: "At least one resolution should be added", field: "availableResolutions"})
-  if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({ message:"minAgeRestriction max 18 min 1", field: "minAgeRestriction"})
-  if (typeof canBeDownloaded === 'undefined') { errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" })}
-  if (typeof canBeDownloaded !== "boolean") { errorMsg.push({ message: "CanBeDownloaded must be boolean", field: "canBeDownloaded" })}
+  if (author && author.length > 20) errorMsg.push({message: "Author max length is 20", field: "author"})
+  if (!availableResolutions || availableResolutions.length === 0) errorMsg.push({
+    message: "At least one resolution should be added",
+    field: "availableResolutions"
+  })
+  if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1)) errorMsg.push({
+    message: "minAgeRestriction max 18 min 1",
+    field: "minAgeRestriction"
+  })
+  if (typeof canBeDownloaded === 'undefined') {
+    errorMsg.push({message: "CanBeDownloaded is required", field: "canBeDownloaded"})
+  }
+  if (typeof canBeDownloaded !== "boolean") {
+    errorMsg.push({message: "CanBeDownloaded must be boolean", field: "canBeDownloaded"})
+  }
   if (!publicationDate) errorMsg.push({message: "publicationDate is required", field: "publicationDate"})
-  if (typeof publicationDate !== "string" || isNaN(Date.parse(publicationDate))) errorMsg.push({message: "publicationDate must be a valid ISO date", field: "publicationDate"})
+  if (typeof publicationDate !== "string" || isNaN(Date.parse(publicationDate))) errorMsg.push({
+    message: "publicationDate must be a valid ISO date",
+    field: "publicationDate"
+  })
 
   if (errorMsg.length > 0) {
-    res.status(HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
+    res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages: errorMsg});
   }
 
   const videoUpdate: videoType = {
