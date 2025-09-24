@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HTTP_STATUS = void 0;
+exports.Resolutions = exports.HTTP_STATUS = void 0;
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = process.env.port || 3000;
@@ -25,7 +25,7 @@ var Resolutions;
     Resolutions["P1080"] = "P1080";
     Resolutions["P1440"] = "P1440";
     Resolutions["P2160"] = "P2160";
-})(Resolutions || (Resolutions = {}));
+})(Resolutions || (exports.Resolutions = Resolutions = {}));
 let dbVideo = [];
 app.get('/', (req, res) => {
     res.send('video api');
@@ -56,7 +56,10 @@ app.post('/videos', (req, res) => {
     if (!availableResolutions)
         errorMsg.push({ message: "AvailableResolutions is required", field: "availableResolutions" });
     if (availableResolutions && !availableResolutions.every(r => Object.values(Resolutions).includes(r)))
-        errorMsg.push({ message: "AvailableResolutions Invalid", field: "availableResolutions" });
+        errorMsg.push({
+            message: "AvailableResolutions Invalid",
+            field: "availableResolutions"
+        });
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }
@@ -92,9 +95,15 @@ app.put('/videos/:id', (req, res) => {
     if (author && author.length > 20)
         errorMsg.push({ message: "Author max length is 20", field: "author" });
     if (!availableResolutions || availableResolutions.length === 0)
-        errorMsg.push({ message: "At least one resolution should be added", field: "availableResolutions" });
+        errorMsg.push({
+            message: "At least one resolution should be added",
+            field: "availableResolutions"
+        });
     if (minAgeRestriction && (minAgeRestriction > 18 || minAgeRestriction < 1))
-        errorMsg.push({ message: "minAgeRestriction max 18 min 1", field: "minAgeRestriction" });
+        errorMsg.push({
+            message: "minAgeRestriction max 18 min 1",
+            field: "minAgeRestriction"
+        });
     if (typeof canBeDownloaded === 'undefined') {
         errorMsg.push({ message: "CanBeDownloaded is required", field: "canBeDownloaded" });
     }
@@ -104,7 +113,10 @@ app.put('/videos/:id', (req, res) => {
     if (!publicationDate)
         errorMsg.push({ message: "publicationDate is required", field: "publicationDate" });
     if (typeof publicationDate !== "string" || isNaN(Date.parse(publicationDate)))
-        errorMsg.push({ message: "publicationDate must be a valid ISO date", field: "publicationDate" });
+        errorMsg.push({
+            message: "publicationDate must be a valid ISO date",
+            field: "publicationDate"
+        });
     if (errorMsg.length > 0) {
         res.status(exports.HTTP_STATUS.BAD_REQUEST_400).json({ errorsMessages: errorMsg });
     }
